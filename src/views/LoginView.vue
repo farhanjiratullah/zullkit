@@ -46,7 +46,7 @@
                                     className="inline-flex"
                                     >Sign In</Button
                                 >
-                                <RouterLink :to="{ name: 'home' }">
+                                <RouterLink :to="{ name: 'register' }">
                                     <Button
                                         variant="light"
                                         size="lg"
