@@ -1,6 +1,5 @@
 <script setup>
-    import TopCategories from "@/components/TopCategories.vue";
-    import NewItems from "@/components/NewItems.vue";
+    import ItemCard from "@/components/ItemCard.vue";
 </script>
 
 <template>
@@ -59,7 +58,7 @@
                 Top Categories
             </h2>
             <div class="flex flex-wrap -mx-1 lg:-mx-4">
-                <TopCategories v-for="topCategory in 4"></TopCategories>
+                <ItemCard v-for="topCategory in 4" variant="md"></ItemCard>
             </div>
         </div>
 
@@ -68,7 +67,7 @@
                 New Items
             </h2>
             <div class="flex flex-wrap -mx-1 lg:-mx-4">
-                <NewItems v-for="newItem in 3"></NewItems>
+                <ItemCard v-for="newItem in 3" variant="lg"></ItemCard>
             </div>
         </div>
     </main>
