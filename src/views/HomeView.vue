@@ -71,6 +71,5 @@
                 <NewItems v-for="newItem in 3"></NewItems>
             </div>
         </div>
-        s
     </main>
 </template>
