@@ -1,5 +1,6 @@
 <script setup>
     import ItemCard from "@/components/ItemCard.vue";
+    import Button from "../components/Button.vue";
 </script>
 
 <template>
@@ -32,12 +33,13 @@
                                 class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start"
                             >
                                 <div class="rounded-full">
-                                    <a
-                                        href="#"
-                                        class="flex items-center justify-center w-full px-8 py-3 text-base font-medium text-white bg-indigo-600 border border-transparent rounded-full hover:bg-indigo-700 md:py-2 md:text-lg md:px-10 hover:shadow"
+                                    <Button
+                                        size="lg"
+                                        variant="dark"
+                                        className="flex"
                                     >
                                         Browse Now
-                                    </a>
+                                    </Button>
                                 </div>
                             </div>
                         </div>
@@ -58,7 +60,7 @@
                 Top Categories
             </h2>
             <div class="flex flex-wrap -mx-1 lg:-mx-4">
-                <ItemCard v-for="topCategory in 4" variant="md"></ItemCard>
+                <ItemCard v-for="topCategory in 4" size="md"></ItemCard>
             </div>
         </div>
 
@@ -67,7 +69,7 @@
                 New Items
             </h2>
             <div class="flex flex-wrap -mx-1 lg:-mx-4">
-                <ItemCard v-for="newItem in 3" variant="lg"></ItemCard>
+                <ItemCard v-for="newItem in 3" size="lg"></ItemCard>
             </div>
         </div>
     </main>
