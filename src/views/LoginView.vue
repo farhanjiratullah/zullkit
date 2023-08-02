@@ -2,7 +2,7 @@
     import InputLabel from "@/components/InputLabel.vue";
     import TextInput from "@/components/TextInput.vue";
     import { RouterLink } from "vue-router";
-    import Button from "../components/Button.vue";
+    import Button from "@/components/Button.vue";
 </script>
 
 <template>
