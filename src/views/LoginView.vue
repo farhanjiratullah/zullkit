@@ -24,7 +24,7 @@
                                 <TextInput
                                     placeholder="Type your email"
                                     id="email"
-                                    type="text"
+                                    type="email"
                                     name="email"
                                 ></TextInput>
                             </div>
