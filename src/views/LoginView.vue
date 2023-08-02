@@ -41,6 +41,7 @@
                             </div>
                             <div class="mt-6">
                                 <Button
+                                    type="submit"
                                     variant="dark"
                                     size="lg"
                                     className="inline-flex"
