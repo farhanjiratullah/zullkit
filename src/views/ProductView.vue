@@ -92,16 +92,18 @@
                             </h1>
                             <ul class="mb-6 text-gray-500">
                                 <FeatureText
-                                    v-for="featureText in 4"
+                                    v-for="featureText in [
+                                        'Customizeable layers',
+                                        'Documentation',
+                                        'Icon set design',
+                                        'Pre-built UI screens',
+                                    ]"
+                                    :key="featureText"
+                                    :title="featureText"
                                 ></FeatureText>
                             </ul>
                         </div>
-                        <a
-                            href="checkout.html"
-                            class="inline-flex items-center justify-center w-full px-8 py-3 text-base font-medium text-white bg-indigo-600 border border-transparent rounded-full hover:bg-indigo-700 md:py-2 md:text-md md:px-10 hover:shadow"
-                        >
-                            Download Now
-                        </a>
+                        <Button variant="dark" size="lg"> Download Now </Button>
                     </div>
                 </div>
             </aside>

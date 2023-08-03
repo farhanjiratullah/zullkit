@@ -1,8 +1,16 @@
-<script setup></script>
+<script setup>
+    const { title } = defineProps({
+        title: {
+            type: String,
+            required: true,
+            default: "",
+        },
+    });
+</script>
 
 <template>
     <li class="mb-2">
-        Customizable layers
+        {{ title }}
         <img
             src="@/assets/img/icon-check.png"
             class="float-right w-5 mt-1"
