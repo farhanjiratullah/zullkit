@@ -6,6 +6,7 @@ const HomeView = () => import("@/views/HomeView.vue");
 const CategoriesView = () => import("@/views/CategoriesView.vue");
 const PricingView = () => import("@/views/PricingView.vue");
 const ProductView = () => import("@/views/ProductView.vue");
+const SuccessView = () => import("@/views/SuccessView.vue");
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,6 +40,11 @@ const router = createRouter({
             path: "/product",
             name: "product",
             component: ProductView,
+        },
+        {
+            path: "/success",
+            name: "success",
+            component: SuccessView,
         },
     ],
 });
