@@ -1,6 +1,6 @@
 <script setup>
     import ItemCard from "@/components/ItemCard.vue";
-    import Button from "../components/Button.vue";
+    import Button from "@/components/Button.vue";
 </script>
 
 <template>
