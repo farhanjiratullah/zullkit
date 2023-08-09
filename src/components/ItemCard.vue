@@ -1,9 +1,29 @@
 <script setup>
-    const { size } = defineProps({
+    const { size, name, thumbnails, amount, category } = defineProps({
         size: {
             type: String,
             required: true,
             default: "md",
+        },
+        name: {
+            type: String,
+            required: true,
+            default: "",
+        },
+        thumbnails: {
+            type: String,
+            required: true,
+            default: "",
+        },
+        amount: {
+            type: Number,
+            required: false,
+            default: 0,
+        },
+        category: {
+            type: String,
+            required: false,
+            default: "",
         },
     });
 </script>
@@ -22,7 +42,7 @@
                     <img
                         alt="Placeholder"
                         class="block w-full h-auto"
-                        src="@/assets/img/categories-1.jpg"
+                        :src="thumbnails"
                     />
                 </div>
             </a>
@@ -33,13 +53,21 @@
                         class="font-semibold text-black no-underline hover:underline"
                         href="#"
                     >
-                        Mobile UI Kit
+                        {{ name }}
                     </a>
                 </h1>
                 <span
                     class="block text-sm font-light text-gray-500 no-underline"
+                    v-if="amount !== undefined && !category"
                 >
-                    731 items
+                    {{ amount.toLocaleString("id-ID") }}
+                    {{ amount > 1 ? "items" : "item" }}
+                </span>
+                <span
+                    class="block text-sm font-light text-gray-500 no-underline"
+                    v-if="category"
+                >
+                    {{ category }}
                 </span>
             </header>
         </div>

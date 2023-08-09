@@ -1,6 +1,19 @@
 <script setup>
     import ItemCard from "@/components/ItemCard.vue";
     import Button from "@/components/Button.vue";
+    import LoadingSpinner from "@/components/LoadingSpinner.vue";
+    import { onMounted, ref } from "vue";
+    import useCategories from "@/composables/categories";
+    import useProducts from "@/composables/products";
+
+    const { isLoadingCategories, topCategories, getTopCategories } =
+        useCategories();
+    const { isLoadingProducts, newItems, getNewItems } = useProducts();
+
+    onMounted(async () => {
+        await getTopCategories();
+        await getNewItems();
+    });
 </script>
 
 <template>
@@ -59,8 +72,22 @@
             <h2 class="mb-4 text-xl font-medium md:mb-0 md:text-lg">
                 Top Categories
             </h2>
-            <div class="flex flex-wrap -mx-1 lg:-mx-4">
-                <ItemCard v-for="topCategory in 4" size="md"></ItemCard>
+            <div
+                class="flex flex-wrap -mx-1 lg:-mx-4 justify-center items-center"
+                :class="{ 'mt-4': isLoadingCategories }"
+            >
+                <template v-if="isLoadingCategories">
+                    <LoadingSpinner></LoadingSpinner>
+                </template>
+                <ItemCard
+                    v-else
+                    v-for="topCategory in topCategories"
+                    :key="topCategory.id"
+                    :name="topCategory.name"
+                    :thumbnails="topCategory.thumbnails"
+                    :amount="topCategory.products_count"
+                    size="md"
+                ></ItemCard>
             </div>
         </div>
 
@@ -68,8 +95,22 @@
             <h2 class="mb-4 text-xl font-medium md:mb-0 md:text-lg">
                 New Items
             </h2>
-            <div class="flex flex-wrap -mx-1 lg:-mx-4">
-                <ItemCard v-for="newItem in 3" size="lg"></ItemCard>
+            <div
+                class="flex flex-wrap -mx-1 lg:-mx-4 justify-center items-center"
+                :class="{ 'mt-4': isLoadingProducts }"
+            >
+                <template v-if="isLoadingProducts">
+                    <LoadingSpinner></LoadingSpinner>
+                </template>
+                <ItemCard
+                    v-else
+                    v-for="newItem in newItems"
+                    :key="newItem.id"
+                    :name="newItem.name"
+                    :thumbnails="newItem.thumbnails"
+                    :category="newItem.category.name"
+                    size="lg"
+                ></ItemCard>
             </div>
         </div>
     </main>
