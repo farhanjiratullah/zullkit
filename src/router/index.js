@@ -4,6 +4,7 @@ const LoginView = () => import("@/views/LoginView.vue");
 const RegisterView = () => import("@/views/RegisterView.vue");
 const HomeView = () => import("@/views/HomeView.vue");
 const CategoriesView = () => import("@/views/CategoriesView.vue");
+const CategoryProductsView = () => import("@/views/CategoryProductsView.vue");
 const PricingView = () => import("@/views/PricingView.vue");
 const ProductView = () => import("@/views/ProductView.vue");
 const SuccessView = () => import("@/views/SuccessView.vue");
@@ -39,12 +40,17 @@ const router = createRouter({
             component: CategoriesView,
         },
         {
+            path: "/categories/:id",
+            name: "category-products",
+            component: CategoryProductsView,
+        },
+        {
             path: "/pricing",
             name: "pricing",
             component: PricingView,
         },
         {
-            path: "/product",
+            path: "/product/:id",
             name: "product",
             component: ProductView,
         },

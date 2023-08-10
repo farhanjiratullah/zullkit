@@ -6,9 +6,9 @@
     import useCategories from "@/composables/categories";
     import useProducts from "@/composables/products";
 
-    const { isLoadingCategories, topCategories, getTopCategories } =
+    const { isLoadingCategories, categories, getTopCategories } =
         useCategories();
-    const { isLoadingProducts, newItems, getNewItems } = useProducts();
+    const { isLoadingProducts, products, getNewItems } = useProducts();
 
     onMounted(async () => {
         await getTopCategories();
@@ -79,15 +79,26 @@
                 <template v-if="isLoadingCategories">
                     <LoadingSpinner></LoadingSpinner>
                 </template>
-                <ItemCard
-                    v-else
-                    v-for="topCategory in topCategories"
-                    :key="topCategory.id"
-                    :name="topCategory.name"
-                    :thumbnails="topCategory.thumbnails"
-                    :amount="topCategory.products_count"
-                    size="md"
-                ></ItemCard>
+                <template v-else>
+                    <template v-if="categories.length">
+                        <ItemCard
+                            v-for="topCategory in categories"
+                            :key="topCategory.id"
+                            :id="topCategory.id"
+                            :name="topCategory.name"
+                            :thumbnails="topCategory.thumbnails"
+                            :amount="topCategory.products_count"
+                            size="md"
+                        ></ItemCard>
+                    </template>
+                    <template v-else>
+                        <h3
+                            class="mb-4 text-xl font-medium md:mb-0 md:text-lg mt-4"
+                        >
+                            There are no categories found
+                        </h3>
+                    </template>
+                </template>
             </div>
         </div>
 
@@ -102,15 +113,26 @@
                 <template v-if="isLoadingProducts">
                     <LoadingSpinner></LoadingSpinner>
                 </template>
-                <ItemCard
-                    v-else
-                    v-for="newItem in newItems"
-                    :key="newItem.id"
-                    :name="newItem.name"
-                    :thumbnails="newItem.thumbnails"
-                    :category="newItem.category.name"
-                    size="lg"
-                ></ItemCard>
+                <template v-else>
+                    <template v-if="products.length">
+                        <ItemCard
+                            v-for="product in products"
+                            :key="product.id"
+                            :id="product.id"
+                            :name="product.name"
+                            :thumbnails="product.thumbnails"
+                            :category="product.category.name"
+                            size="lg"
+                        ></ItemCard>
+                    </template>
+                    <template v-else>
+                        <h3
+                            class="mb-4 text-xl font-medium md:mb-0 md:text-lg mt-4"
+                        >
+                            There are no products found
+                        </h3>
+                    </template>
+                </template>
             </div>
         </div>
     </main>

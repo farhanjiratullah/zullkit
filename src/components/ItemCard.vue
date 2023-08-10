@@ -1,4 +1,8 @@
 <script setup>
+    import { RouterLink, useRoute } from "vue-router";
+
+    const router = useRoute();
+
     const { size, name, thumbnails, amount, category } = defineProps({
         size: {
             type: String,
@@ -10,6 +14,11 @@
             required: true,
             default: "",
         },
+        id: {
+            type: Number,
+            required: true,
+            default: 0,
+        },
         thumbnails: {
             type: String,
             required: true,
@@ -18,9 +27,14 @@
         amount: {
             type: Number,
             required: false,
-            default: 0,
+            default: undefined,
         },
         category: {
+            type: String,
+            required: false,
+            default: "",
+        },
+        subtitle: {
             type: String,
             required: false,
             default: "",
@@ -37,7 +51,10 @@
         ]"
     >
         <div class="overflow-hidden border border-gray-200 rounded-xl">
-            <a href="details.html">
+            <RouterLink
+                :to="{ name: 'category-products', params: { id } }"
+                v-if="amount !== undefined"
+            >
                 <div class="m-4 overflow-hidden rounded-xl">
                     <img
                         alt="Placeholder"
@@ -45,29 +62,57 @@
                         :src="thumbnails"
                     />
                 </div>
-            </a>
+            </RouterLink>
+            <RouterLink
+                :to="{ name: 'product', params: { id } }"
+                v-if="amount === undefined"
+            >
+                <div class="m-4 overflow-hidden rounded-xl">
+                    <img
+                        alt="Placeholder"
+                        class="block w-full h-auto"
+                        :src="thumbnails"
+                    />
+                </div>
+            </RouterLink>
 
             <header class="px-4 mb-4 leading-tight">
                 <h1 class="text-lg">
-                    <a
+                    <RouterLink
                         class="font-semibold text-black no-underline hover:underline"
-                        href="#"
+                        :to="{ name: 'category-products', params: { id } }"
+                        v-if="amount !== undefined"
                     >
                         {{ name }}
-                    </a>
+                    </RouterLink>
+                </h1>
+                <h1 class="text-lg">
+                    <RouterLink
+                        class="font-semibold text-black no-underline hover:underline"
+                        :to="{ name: 'product', params: { id } }"
+                        v-if="amount === undefined"
+                    >
+                        {{ name }}
+                    </RouterLink>
                 </h1>
                 <span
                     class="block text-sm font-light text-gray-500 no-underline"
-                    v-if="amount !== undefined && !category"
+                    v-if="router.name === 'category-products'"
                 >
-                    {{ amount.toLocaleString("id-ID") }}
-                    {{ amount > 1 ? "items" : "item" }}
+                    {{ subtitle }}
                 </span>
                 <span
                     class="block text-sm font-light text-gray-500 no-underline"
-                    v-if="category"
+                    v-if="amount === undefined"
                 >
                     {{ category }}
+                </span>
+                <span
+                    class="block text-sm font-light text-gray-500 no-underline"
+                    v-if="amount !== undefined"
+                >
+                    {{ amount.toLocaleString("id-ID") }}
+                    {{ amount > 1 ? "items" : "item" }}
                 </span>
             </header>
         </div>

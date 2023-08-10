@@ -1,8 +1,15 @@
 import axios from "axios";
-import { ref } from "vue";
+import { reactive, ref } from "vue";
+import { useRoute } from "vue-router";
 
 export default function useCategories() {
-    const topCategories = ref([]);
+    const router = useRoute();
+
+    const categories = ref([]);
+    const category = reactive({
+        name: "",
+    });
+    const categoryProducts = ref([]);
     const isLoadingCategories = ref(true);
 
     const getTopCategories = async () => {
@@ -11,9 +18,11 @@ export default function useCategories() {
                 data: {
                     data: { data: data },
                 },
-            } = await axios.get("categories");
+            } = await axios.get("categories", {
+                params: { limit: 4 },
+            });
 
-            topCategories.value = data;
+            categories.value = data;
         } catch (error) {
             console.error(error);
         } finally {
@@ -21,5 +30,46 @@ export default function useCategories() {
         }
     };
 
-    return { isLoadingCategories, topCategories, getTopCategories };
+    const getAllCategories = async () => {
+        try {
+            const {
+                data: {
+                    data: { data: data },
+                },
+            } = await axios.get("categories", { params: { limit: 28 } });
+
+            categories.value = data;
+        } catch (error) {
+            console.error(error);
+        } finally {
+            isLoadingCategories.value = false;
+        }
+    };
+
+    const getAllProductsByCategory = async () => {
+        try {
+            const {
+                data: { data: data },
+            } = await axios.get("categories", {
+                params: { show_product: 1, id: router.params.id },
+            });
+
+            category.name = data.name;
+            categoryProducts.value = data.products;
+        } catch (error) {
+            console.error(error);
+        } finally {
+            isLoadingCategories.value = false;
+        }
+    };
+
+    return {
+        isLoadingCategories,
+        category,
+        categories,
+        categoryProducts,
+        getTopCategories,
+        getAllCategories,
+        getAllProductsByCategory,
+    };
 }

@@ -2,7 +2,7 @@ import axios from "axios";
 import { ref } from "vue";
 
 export default function useProducts() {
-    const newItems = ref([]);
+    const products = ref([]);
     const isLoadingProducts = ref(true);
 
     const getNewItems = async () => {
@@ -11,9 +11,9 @@ export default function useProducts() {
                 data: {
                     data: { data: data },
                 },
-            } = await axios.get("products");
+            } = await axios.get("products", { params: { limit: 3 } });
 
-            newItems.value = data;
+            products.value = data;
         } catch (error) {
             console.error(error);
         } finally {
@@ -21,5 +21,5 @@ export default function useProducts() {
         }
     };
 
-    return { isLoadingProducts, newItems, getNewItems };
+    return { isLoadingProducts, products, getNewItems };
 }
