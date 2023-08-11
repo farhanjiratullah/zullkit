@@ -1,28 +1,24 @@
 <script setup>
     import Button from "@/components/Button.vue";
     import FeatureIcon from "@/components/FeatureIcon.vue";
-    import { ref } from "vue";
+    import { onMounted, ref } from "vue";
     import FeatureText from "../components/FeatureText.vue";
+    import useProducts from "@/composables/products";
 
-    const featuredGallery = ref("gallery-2.png");
-    const galleries = ref([
-        {
-            id: 1,
-            url: "gallery-2.png",
-        },
-        {
-            id: 2,
-            url: "gallery-3.png",
-        },
-        {
-            id: 3,
-            url: "gallery-4.png",
-        },
-        {
-            id: 4,
-            url: "gallery-5.png",
-        },
-    ]);
+    const { isLoadingProducts, product, getDetailProduct } = useProducts();
+
+    const featuredGallery = ref("");
+    const galleries = ref([]);
+
+    onMounted(async () => {
+        await getDetailProduct();
+
+        featuredGallery.value = product.value.thumbnails;
+        galleries.value.push(product.value.thumbnails);
+        product.value.galleries.map((gallery) =>
+            galleries.value.push(gallery.url)
+        );
+    });
 </script>
 
 <template>
@@ -32,74 +28,61 @@
                 <h1
                     class="mb-2 text-3xl font-bold leading-normal tracking-tight text-gray-900 sm:text-4xl md:text-4xl"
                 >
-                    RoboCrypto UI Kit
+                    {{ product.name }}
                 </h1>
-                <p class="text-gray-500">Build your next coin startup</p>
+                <p class="text-gray-500">{{ product.subtitle }}</p>
                 <section id="gallery">
                     <img
-                        :src="`/src/assets/img/${featuredGallery}`"
-                        :alt="featuredGallery"
+                        :src="featuredGallery"
+                        :alt="product.name"
                         class="w-full mt-6 rounded-2xl"
                     />
                     <div class="grid grid-cols-4 gap-4 mt-4">
                         <div
-                            v-for="gallery in galleries"
-                            :key="gallery.id"
+                            v-for="(gallery, index) in galleries"
+                            :key="index + 1"
                             class="overflow-hidden cursor-pointer rounded-2xl"
                             :class="{
                                 'ring-2 ring-indigo-500':
-                                    featuredGallery === gallery.url,
+                                    featuredGallery === gallery,
                             }"
-                            @click="featuredGallery = gallery.url"
+                            @click="featuredGallery = gallery"
                         >
                             <img
-                                :src="`/src/assets/img/${gallery.url}`"
+                                :src="gallery"
                                 class="w-full"
-                                :alt="gallery.url"
+                                :alt="product.name"
                             />
                         </div>
                     </div>
                 </section>
                 <section class="" id="orders">
                     <h1 class="mt-8 mb-3 text-lg font-semibold">About</h1>
-                    <div class="text-gray-500">
-                        <p class="pb-4">
-                            Sportly App UI Kit will help your Sport, Fitness,
-                            and Workout App products or services. Came with
-                            modern and sporty style, you can easily edit and
-                            customize all elements with components that can
-                            speed up your design process.
-                        </p>
-                        <p class="pb-4">
-                            Suitable for : <br />
-                            - Sport App <br />
-                            - Fitness & GYM App <br />
-                            - Workout App <br />
-                            - Trainer & Tracker App <br />
-                            - And many more <br />
-                        </p>
-                    </div>
+                    <div
+                        class="text-gray-500"
+                        v-html="product.description"
+                    ></div>
                 </section>
             </main>
             <aside class="w-full px-4 sm:w-1/3 md:w-1/3">
                 <div class="sticky top-0 w-full pt-4 md:mt-24">
                     <div class="p-6 border rounded-2xl">
-                        <FeatureIcon></FeatureIcon>
-                        <FeatureIcon></FeatureIcon>
+                        <FeatureIcon
+                            :isFigma="product.is_figma"
+                            :isSketch="product.is_sketch"
+                        ></FeatureIcon>
                         <div>
                             <h1 class="mt-5 mb-3 font-semibold text-md">
                                 Great Features
                             </h1>
                             <ul class="mb-6 text-gray-500">
                                 <FeatureText
-                                    v-for="featureText in [
-                                        'Customizeable layers',
-                                        'Documentation',
-                                        'Icon set design',
-                                        'Pre-built UI screens',
-                                    ]"
+                                    v-for="featureText in product.features.split(
+                                        ', '
+                                    )"
                                     :key="featureText"
                                     :title="featureText"
+                                    v-if="product.features"
                                 ></FeatureText>
                             </ul>
                         </div>

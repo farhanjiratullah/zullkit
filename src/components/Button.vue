@@ -1,5 +1,5 @@
 <script setup>
-    const { type, className } = defineProps({
+    const { type, variant, size, className } = defineProps({
         type: {
             type: String,
             required: false,
