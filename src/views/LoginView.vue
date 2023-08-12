@@ -4,20 +4,14 @@
     import { RouterLink } from "vue-router";
     import Button from "@/components/Button.vue";
     import { ref } from "vue";
-    import axios from "axios";
+    import { useAuthStore } from "@/stores/auth";
 
     const form = ref({
         email: "",
         password: "",
     });
 
-    const handleLogin = async () => {
-        const {
-            data: { data: data },
-        } = await axios.post("login", form.value);
-
-        localStorage.setItem("access_token", data.access_token);
-    };
+    const auth = useAuthStore();
 </script>
 
 <template>
@@ -31,7 +25,10 @@
                         <h2 class="mb-20 text-5xl font-bold text-center">
                             Welcome Back
                         </h2>
-                        <form @submit.prevent="handleLogin" method="post">
+                        <form
+                            @submit.prevent="auth.handleLogin(form)"
+                            method="post"
+                        >
                             <div class="mb-4">
                                 <InputLabel htmlFor="email"
                                     >Email Address</InputLabel
@@ -65,7 +62,7 @@
                                     >Sign In</Button
                                 >
                                 <Button
-                                    @click="handleLogin"
+                                    @click="auth.handleLogin(form)"
                                     variant="dark"
                                     size="lg"
                                     className="inline-flex"

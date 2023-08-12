@@ -1,8 +1,28 @@
 <script setup>
+    import { onMounted, ref } from "vue";
     import { RouterLink, useRoute } from "vue-router";
+    import { useAuthStore } from "../stores/auth";
     import Button from "./Button.vue";
 
+    const auth = useAuthStore();
+
     const router = useRoute();
+
+    const show = ref(false);
+
+    onMounted(async () => {
+        await auth.getUser();
+    });
+
+    const toggleDropdown = () => {
+        show.value = !show.value;
+    };
+
+    const logout = () => {
+        localStorage.clear("access_token");
+
+        router.push("/login");
+    };
 </script>
 
 <template>
@@ -19,7 +39,71 @@
                     alt="Zullkit Logo"
                 />
             </RouterLink>
-            <div class="md:order-2">
+
+            <div class="md:order-2 flex items-center" v-if="auth.isLoggedIn">
+                <div class="flex items-center">
+                    <div class="mr-2 text-sm font-regular">
+                        Halo, {{ auth.user.name }}
+                    </div>
+                    <button
+                        type="button"
+                        class="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                        id="user-menu-button"
+                        aria-expanded="false"
+                        data-dropdown-toggle="dropdown"
+                        @click="toggleDropdown"
+                    >
+                        <span class="sr-only">Open user menu</span>
+                        <img
+                            class="w-8 h-8 rounded-full"
+                            :src="auth.user.profile_photo_url"
+                            :alt="auth.user.name"
+                        />
+                    </button>
+                </div>
+
+                <div
+                    class="z-50 fixed top-12 right-20 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
+                    id="dropdown"
+                    :class="{ hidden: !show }"
+                >
+                    <div class="px-4 py-3">
+                        <span
+                            class="block text-sm text-gray-900 dark:text-white"
+                            >{{ auth.user.name }}</span
+                        >
+                        <span
+                            class="block text-sm text-gray-500 truncate font-regular dark:text-gray-400"
+                            >{{ auth.email }}</span
+                        >
+                    </div>
+                    <ul class="py-1" aria-labelledby="dropdown">
+                        <li>
+                            <a
+                                href="#"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                                >Subscriptions</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="#"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                                >Settings</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href=""
+                                @click="logout"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                                >Sign out</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="md:order-2" v-else>
                 <RouterLink :to="{ name: 'login' }">
                     <Button variant="light" size="md" className="mr-2"
                         >Sign In</Button
@@ -73,10 +157,11 @@
                     </li>
                 </ul>
             </div>
+
             <button
                 data-collapse-toggle="mobile-menu-2"
                 type="button"
-                class="inline-flex items-center p-2 mt-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
                 aria-controls="mobile-menu-2"
                 aria-expanded="false"
             >

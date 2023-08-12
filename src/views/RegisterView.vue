@@ -6,6 +6,7 @@
     import Button from "@/components/Button.vue";
     import { ref } from "vue";
     import Benefit from "@/components/Benefit.vue";
+    import { useAuthStore } from "@/stores/auth";
 
     const benefits = ref([
         {
@@ -138,13 +139,7 @@
         title: "Designer",
     });
 
-    const handleRegister = async () => {
-        const {
-            data: { data: data },
-        } = await axios.post("register", form.value);
-
-        localStorage.setItem("access_token", data.access_token);
-    };
+    const auth = useAuthStore();
 </script>
 
 <template>
@@ -173,7 +168,7 @@
                             </div>
                             <div>
                                 <form
-                                    @submit.prevent="handleRegister"
+                                    @submit.prevent="auth.handleRegister(form)"
                                     method="post"
                                 >
                                     <div class="mb-4">
@@ -223,7 +218,7 @@
                                             >Sign In</Button
                                         >
                                         <Button
-                                            @click="handleRegister"
+                                            @click="auth.handleRegister(form)"
                                             variant="dark"
                                             size="lg"
                                             className="inline-flex"

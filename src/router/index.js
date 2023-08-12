@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
 
 const LoginView = () => import("@/views/LoginView.vue");
 const RegisterView = () => import("@/views/RegisterView.vue");
@@ -22,11 +23,25 @@ const router = createRouter({
         {
             path: "/login",
             name: "login",
+            beforeEnter: async (to, from, next) => {
+                const auth = useAuthStore();
+
+                await auth.getUser();
+
+                auth.isLoggedIn ? next({ name: "home" }) : next();
+            },
             component: LoginView,
         },
         {
             path: "/register",
             name: "register",
+            beforeEnter: async (to, from, next) => {
+                const auth = useAuthStore();
+
+                await auth.getUser();
+
+                auth.isLoggedIn ? next({ name: "home" }) : next();
+            },
             component: RegisterView,
         },
         {
