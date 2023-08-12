@@ -3,6 +3,21 @@
     import TextInput from "@/components/TextInput.vue";
     import { RouterLink } from "vue-router";
     import Button from "@/components/Button.vue";
+    import { ref } from "vue";
+    import axios from "axios";
+
+    const form = ref({
+        email: "",
+        password: "",
+    });
+
+    const handleLogin = async () => {
+        const {
+            data: { data: data },
+        } = await axios.post("login", form.value);
+
+        localStorage.setItem("access_token", data.access_token);
+    };
 </script>
 
 <template>
@@ -16,7 +31,7 @@
                         <h2 class="mb-20 text-5xl font-bold text-center">
                             Welcome Back
                         </h2>
-                        <form>
+                        <form @submit.prevent="handleLogin" method="post">
                             <div class="mb-4">
                                 <InputLabel htmlFor="email"
                                     >Email Address</InputLabel
@@ -26,6 +41,7 @@
                                     id="email"
                                     type="email"
                                     name="email"
+                                    v-model="form.email"
                                 ></TextInput>
                             </div>
                             <div class="mb-4">
@@ -37,11 +53,19 @@
                                     id="password"
                                     type="password"
                                     name="password"
+                                    v-model="form.password"
                                 ></TextInput>
                             </div>
                             <div class="mt-6">
                                 <Button
                                     type="submit"
+                                    variant="dark"
+                                    size="lg"
+                                    className="hidden"
+                                    >Sign In</Button
+                                >
+                                <Button
+                                    @click="handleLogin"
                                     variant="dark"
                                     size="lg"
                                     className="inline-flex"

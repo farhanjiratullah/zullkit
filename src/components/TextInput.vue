@@ -1,5 +1,9 @@
 <script setup>
-    const { placeholder, id, type, name, className } = defineProps({
+    const { modelValue, placeholder, id, type, name, className } = defineProps({
+        modelValue: {
+            required: true,
+            default: undefined,
+        },
         placeholder: {
             type: String,
             required: true,
@@ -26,10 +30,14 @@
             default: "",
         },
     });
+
+    defineEmits(["update:modelValue"]);
 </script>
 
 <template>
     <input
+        :value="modelValue"
+        @input="$emit('update:modelValue', $event.target.value)"
         :placeholder="placeholder"
         :id="id"
         :type="type"

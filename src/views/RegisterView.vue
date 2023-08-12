@@ -1,4 +1,5 @@
 <script setup>
+    import axios from "axios";
     import InputLabel from "@/components/InputLabel.vue";
     import TextInput from "@/components/TextInput.vue";
     import { RouterLink } from "vue-router";
@@ -129,6 +130,21 @@
             `,
         },
     ]);
+
+    const form = ref({
+        name: "",
+        email: "",
+        password: "",
+        title: "Designer",
+    });
+
+    const handleRegister = async () => {
+        const {
+            data: { data: data },
+        } = await axios.post("register", form.value);
+
+        localStorage.setItem("access_token", data.access_token);
+    };
 </script>
 
 <template>
@@ -156,7 +172,10 @@
                                 ></Benefit>
                             </div>
                             <div>
-                                <form>
+                                <form
+                                    @submit.prevent="handleRegister"
+                                    method="post"
+                                >
                                     <div class="mb-4">
                                         <InputLabel htmlFor="name"
                                             >Name</InputLabel
@@ -166,6 +185,7 @@
                                             id="name"
                                             type="text"
                                             name="name"
+                                            v-model="form.name"
                                         >
                                         </TextInput>
                                     </div>
@@ -178,6 +198,7 @@
                                             id="email"
                                             type="email"
                                             name="email"
+                                            v-model="form.email"
                                         >
                                         </TextInput>
                                     </div>
@@ -190,10 +211,19 @@
                                             id="password"
                                             type="password"
                                             name="password"
+                                            v-model="form.password"
                                         ></TextInput>
                                     </div>
                                     <div class="mt-6">
                                         <Button
+                                            type="submit"
+                                            variant="dark"
+                                            size="lg"
+                                            className="hidden"
+                                            >Sign In</Button
+                                        >
+                                        <Button
+                                            @click="handleRegister"
                                             variant="dark"
                                             size="lg"
                                             className="inline-flex"
