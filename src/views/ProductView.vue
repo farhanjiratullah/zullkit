@@ -5,11 +5,13 @@
     import FeatureText from "../components/FeatureText.vue";
     import useProducts from "@/composables/products";
     import LoadingSpinner from "@/components/LoadingSpinner.vue";
+    import { useAuthStore } from "../stores/auth";
 
     const { isLoadingProducts, product, getDetailProduct } = useProducts();
 
     const featuredGallery = ref("");
     const galleries = ref([]);
+    const auth = useAuthStore();
 
     onMounted(async () => {
         await getDetailProduct();
@@ -100,9 +102,24 @@
                                             ></FeatureText>
                                         </ul>
                                     </div>
-                                    <Button variant="dark" size="lg">
-                                        Download Now
-                                    </Button>
+                                    <a
+                                        :href="product.file"
+                                        v-if="
+                                            auth.user?.subscription?.length > 0
+                                        "
+                                    >
+                                        <Button variant="dark" size="lg">
+                                            Download Now
+                                        </Button>
+                                    </a>
+                                    <RouterLink
+                                        v-else
+                                        :to="{ name: 'pricing' }"
+                                    >
+                                        <Button variant="dark" size="lg">
+                                            Subscribe
+                                        </Button>
+                                    </RouterLink>
                                 </div>
                             </div>
                         </aside>
