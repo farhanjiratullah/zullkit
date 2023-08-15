@@ -1,6 +1,10 @@
 <script setup>
     import FeatureText from "@/components/FeatureText.vue";
     import Button from "@/components/Button.vue";
+    import useSubscriptions from "@/composables/subscriptions";
+    import LoadingSpinner from "@/components/LoadingSpinner.vue";
+
+    const { isLoadingSubscriptions, postSubscription } = useSubscriptions();
 
     const { price, title, subtitle, features } = defineProps({
         price: {
@@ -46,10 +50,30 @@
                 ></FeatureText>
             </ul>
             <template v-if="title === 'Basic'">
-                <Button variant="light" size="lg"> Checkout Now </Button>
+                <Button
+                    variant="light"
+                    size="lg"
+                    :isLoadingSubscriptions="isLoadingSubscriptions"
+                    @click="postSubscription(price)"
+                >
+                    <template v-if="isLoadingSubscriptions">
+                        Loading...
+                    </template>
+                    <template v-else> Checkout Now </template>
+                </Button>
             </template>
             <template v-if="title === 'Gold'">
-                <Button variant="dark" size="lg"> Checkout Now </Button>
+                <Button
+                    variant="dark"
+                    size="lg"
+                    :isLoadingSubscriptions="isLoadingSubscriptions"
+                    @click="postSubscription(price)"
+                >
+                    <template v-if="isLoadingSubscriptions">
+                        Loading...
+                    </template>
+                    <template v-else> Checkout Now </template>
+                </Button>
             </template>
         </div>
     </div>
