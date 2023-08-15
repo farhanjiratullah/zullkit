@@ -1,4 +1,6 @@
-# zullkit
+# Zullkit
+Kelas Rekaman Front-end Developer: Mastering Vue JS 3
+=======
 
 This template should help get you started developing with Vue 3 in Vite.
 
