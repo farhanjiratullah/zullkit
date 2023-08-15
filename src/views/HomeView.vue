@@ -1,6 +1,19 @@
 <script setup>
     import ItemCard from "@/components/ItemCard.vue";
     import Button from "@/components/Button.vue";
+    import LoadingSpinner from "@/components/LoadingSpinner.vue";
+    import { onMounted, ref } from "vue";
+    import useCategories from "@/composables/categories";
+    import useProducts from "@/composables/products";
+
+    const { isLoadingCategories, categories, getTopCategories } =
+        useCategories();
+    const { isLoadingProducts, products, getNewItems } = useProducts();
+
+    onMounted(async () => {
+        await getTopCategories();
+        await getNewItems();
+    });
 </script>
 
 <template>
@@ -59,8 +72,33 @@
             <h2 class="mb-4 text-xl font-medium md:mb-0 md:text-lg">
                 Top Categories
             </h2>
-            <div class="flex flex-wrap -mx-1 lg:-mx-4">
-                <ItemCard v-for="topCategory in 4" size="md"></ItemCard>
+            <div
+                class="flex flex-wrap -mx-1 lg:-mx-4 justify-center items-center"
+                :class="{ 'mt-4': isLoadingCategories }"
+            >
+                <template v-if="isLoadingCategories">
+                    <LoadingSpinner></LoadingSpinner>
+                </template>
+                <template v-else>
+                    <template v-if="categories.length">
+                        <ItemCard
+                            v-for="topCategory in categories"
+                            :key="topCategory.id"
+                            :id="topCategory.id"
+                            :name="topCategory.name"
+                            :thumbnails="topCategory.thumbnails"
+                            :amount="topCategory.products_count"
+                            size="md"
+                        ></ItemCard>
+                    </template>
+                    <template v-else>
+                        <h3
+                            class="mb-4 text-xl font-medium md:mb-0 md:text-lg mt-4"
+                        >
+                            There are no categories found
+                        </h3>
+                    </template>
+                </template>
             </div>
         </div>
 
@@ -68,8 +106,33 @@
             <h2 class="mb-4 text-xl font-medium md:mb-0 md:text-lg">
                 New Items
             </h2>
-            <div class="flex flex-wrap -mx-1 lg:-mx-4">
-                <ItemCard v-for="newItem in 3" size="lg"></ItemCard>
+            <div
+                class="flex flex-wrap -mx-1 lg:-mx-4 justify-center items-center"
+                :class="{ 'mt-4': isLoadingProducts }"
+            >
+                <template v-if="isLoadingProducts">
+                    <LoadingSpinner></LoadingSpinner>
+                </template>
+                <template v-else>
+                    <template v-if="products.length">
+                        <ItemCard
+                            v-for="product in products"
+                            :key="product.id"
+                            :id="product.id"
+                            :name="product.name"
+                            :thumbnails="product.thumbnails"
+                            :category="product.category.name"
+                            size="lg"
+                        ></ItemCard>
+                    </template>
+                    <template v-else>
+                        <h3
+                            class="mb-4 text-xl font-medium md:mb-0 md:text-lg mt-4"
+                        >
+                            There are no products found
+                        </h3>
+                    </template>
+                </template>
             </div>
         </div>
     </main>
