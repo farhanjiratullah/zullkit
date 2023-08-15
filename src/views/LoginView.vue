@@ -3,6 +3,15 @@
     import TextInput from "@/components/TextInput.vue";
     import { RouterLink } from "vue-router";
     import Button from "@/components/Button.vue";
+    import { ref } from "vue";
+    import { useAuthStore } from "@/stores/auth";
+
+    const form = ref({
+        email: "",
+        password: "",
+    });
+
+    const auth = useAuthStore();
 </script>
 
 <template>
@@ -16,7 +25,10 @@
                         <h2 class="mb-20 text-5xl font-bold text-center">
                             Welcome Back
                         </h2>
-                        <form>
+                        <form
+                            @submit.prevent="auth.handleLogin(form)"
+                            method="post"
+                        >
                             <div class="mb-4">
                                 <InputLabel htmlFor="email"
                                     >Email Address</InputLabel
@@ -26,6 +38,7 @@
                                     id="email"
                                     type="email"
                                     name="email"
+                                    v-model="form.email"
                                 ></TextInput>
                             </div>
                             <div class="mb-4">
@@ -37,11 +50,19 @@
                                     id="password"
                                     type="password"
                                     name="password"
+                                    v-model="form.password"
                                 ></TextInput>
                             </div>
                             <div class="mt-6">
                                 <Button
                                     type="submit"
+                                    variant="dark"
+                                    size="lg"
+                                    className="hidden"
+                                    >Sign In</Button
+                                >
+                                <Button
+                                    @click="auth.handleLogin(form)"
                                     variant="dark"
                                     size="lg"
                                     className="inline-flex"

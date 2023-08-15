@@ -1,10 +1,12 @@
 <script setup>
+    import axios from "axios";
     import InputLabel from "@/components/InputLabel.vue";
     import TextInput from "@/components/TextInput.vue";
     import { RouterLink } from "vue-router";
     import Button from "@/components/Button.vue";
     import { ref } from "vue";
     import Benefit from "@/components/Benefit.vue";
+    import { useAuthStore } from "@/stores/auth";
 
     const benefits = ref([
         {
@@ -129,6 +131,15 @@
             `,
         },
     ]);
+
+    const form = ref({
+        name: "",
+        email: "",
+        password: "",
+        title: "Designer",
+    });
+
+    const auth = useAuthStore();
 </script>
 
 <template>
@@ -156,7 +167,10 @@
                                 ></Benefit>
                             </div>
                             <div>
-                                <form>
+                                <form
+                                    @submit.prevent="auth.handleRegister(form)"
+                                    method="post"
+                                >
                                     <div class="mb-4">
                                         <InputLabel htmlFor="name"
                                             >Name</InputLabel
@@ -166,6 +180,7 @@
                                             id="name"
                                             type="text"
                                             name="name"
+                                            v-model="form.name"
                                         >
                                         </TextInput>
                                     </div>
@@ -178,6 +193,7 @@
                                             id="email"
                                             type="email"
                                             name="email"
+                                            v-model="form.email"
                                         >
                                         </TextInput>
                                     </div>
@@ -190,10 +206,19 @@
                                             id="password"
                                             type="password"
                                             name="password"
+                                            v-model="form.password"
                                         ></TextInput>
                                     </div>
                                     <div class="mt-6">
                                         <Button
+                                            type="submit"
+                                            variant="dark"
+                                            size="lg"
+                                            className="hidden"
+                                            >Sign In</Button
+                                        >
+                                        <Button
+                                            @click="auth.handleRegister(form)"
                                             variant="dark"
                                             size="lg"
                                             className="inline-flex"
